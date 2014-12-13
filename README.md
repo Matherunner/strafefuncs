@@ -51,6 +51,17 @@ for (int i = 0; i < 50; i++) {
 }
 ```
 
+After this loop the final ``v`` should contain the correct resulting velocity.
+Note that this example demonstrates leftstrafing.  If rightstrafing is
+required, then we should flip the signs of each element of ``sts``.  Using our
+example above, a loop like the following should be incorporated before the
+inner loop.
+
+```cpp
+for (int j = 0; j < 20; j++)
+  sts[j] = flip_signs(sts[j]);
+```
+
 The usage of case 1 strafing is similar, except we only have one array instead
 of two.
 
