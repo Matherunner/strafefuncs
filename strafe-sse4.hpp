@@ -2,7 +2,6 @@
 #define FASTSTRAFE_H
 
 #include <smmintrin.h>
-#include <cstdint>
 
 struct c1_params_t {
     __m128d Ls;
