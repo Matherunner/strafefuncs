@@ -17,16 +17,13 @@ struct c2_params_t {
     __m128d twospdcnsts;
 };
 
-inline double p2l_distsq(__m128d p, __m128d ols, __m128d dls)
+inline __m128d p2l_distsq(__m128d p, __m128d ols, __m128d dls)
 {
     __m128d tmp = _mm_sub_pd(ols, p);
     __m128d dot = _mm_dp_pd(tmp, dls, 0x33);
     dot = _mm_mul_pd(dot, dls);
     tmp = _mm_sub_pd(tmp, dot);
-    tmp = _mm_dp_pd(tmp, tmp, 0x31);
-    double val;
-    _mm_store_sd(&val, tmp);
-    return val;
+    return _mm_dp_pd(tmp, tmp, 0x31);
 }
 
 inline __m128d strafe_newpos(__m128d p, __m128d v, __m128d tau)
