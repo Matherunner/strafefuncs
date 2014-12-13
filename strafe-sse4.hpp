@@ -109,4 +109,24 @@ inline __m128d strafe_c2_side(__m128d v, __m128d ct, __m128d st)
     return _mm_addsub_pd(v, st);
 }
 
+inline void strafe_c1_line(__m128d &v, __m128d &p, __m128d Lspd,
+                           __m128d taus, __m128d ols, __m128d dls)
+{
+    __m128d a = _mm_mul_pd(v, Lspd);
+    a = _mm_shuffle_pd(a, a, 1);
+    __m128d vleft = _mm_addsub_pd(v, a);
+    __m128d vright = _mm_addsub_pd(v, flip_signs(a));
+    __m128d pleft = strafe_newpos(p, vleft, taus);
+    __m128d pright = strafe_newpos(p, vright, taus);
+    __m128d dsqleft = p2l_distsq(pleft, ols, dls);
+    __m128d dsqright = p2l_distsq(pright, ols, dls);
+    if (_mm_comilt_sd(dsqleft, dsqright)) {
+        v = vleft;
+        p = pleft;
+    } else {
+        v = vright;
+        p = pright;
+    }
+}
+
 #endif
