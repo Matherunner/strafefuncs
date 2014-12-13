@@ -17,6 +17,12 @@ struct c2_params_t {
     __m128d twospdcnsts;
 };
 
+inline __m128d flip_signs(__m128d in)
+{
+    __m128i flipper = _mm_set_epi32(-2147483648, 0, -2147483648, 0);
+    return _mm_xor_pd(in, *(__m128d *)&flipper);
+}
+
 inline __m128d p2l_distsq(__m128d p, __m128d ols, __m128d dls)
 {
     __m128d tmp = _mm_sub_pd(ols, p);
