@@ -37,7 +37,7 @@ inline __m128d strafe_newpos(__m128d p, __m128d v, __m128d tau)
     return _mm_add_pd(p, _mm_mul_pd(v, tau));
 }
 
-void strafe_c1_precom(double L, c1_params_t &params)
+void strafe_c1_precom1(double L, c1_params_t &params)
 {
     params.Ls = _mm_loaddup_pd(&L);
     __m128d Lsqs = _mm_mul_pd(params.Ls, params.Ls);
@@ -45,7 +45,7 @@ void strafe_c1_precom(double L, c1_params_t &params)
     params.zeroLsq = _mm_move_sd(Lsqs, _mm_setzero_pd());
 }
 
-void strafe_c2_precom(double L, double tauMA, c2_params_t &params)
+void strafe_c2_precom1(double L, double tauMA, c2_params_t &params)
 {
     params.tauMAs = _mm_loaddup_pd(&tauMA);
     double LtauMA = L - tauMA;
@@ -57,8 +57,8 @@ void strafe_c2_precom(double L, double tauMA, c2_params_t &params)
     params.twospdcnsts = _mm_add_pd(spdcnsts, spdcnsts);
 }
 
-inline void strafe_c1_Lspds(__m128d *Lspds, size_t n, __m128d v,
-                            const c1_params_t &params)
+inline void strafe_c1_precom2(__m128d *Lspds, size_t n, __m128d v,
+                              const c1_params_t &params)
 {
     __m128d v0sqs = _mm_dp_pd(v, v, 0x33);
     v0sqs = _mm_add_pd(v0sqs, params.zeroLsq);
@@ -71,8 +71,8 @@ inline void strafe_c1_Lspds(__m128d *Lspds, size_t n, __m128d v,
     }
 }
 
-inline void strafe_c2_ctsts(__m128d *cts, __m128d *sts, size_t n, __m128d v,
-                            const c2_params_t &params)
+inline void strafe_c2_precom2(__m128d *cts, __m128d *sts, size_t n, __m128d v,
+                              const c2_params_t &params)
 {
     __m128d v0sqs = _mm_dp_pd(v, v, 0x33);
     v0sqs = _mm_add_pd(v0sqs, params.zerospdcnst);

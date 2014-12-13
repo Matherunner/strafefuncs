@@ -16,12 +16,12 @@ as *case 2 strafing*.  The functions implementing this have ``c2`` in their
 names.
 
 Suppose we want to strafe 1000 frames.  We would start by using
-``strafe_c2_precom`` to precompute some constants which will be stored in
+``strafe_c2_precom1`` to precompute some constants which will be stored in
 ``c2_params_t``.
 
 ```cpp
 c2_params_t c2params;
-strafe_c2_precom(30, 0.001 * 320 * 10, c2params);
+strafe_c2_precom1(30, 0.001 * 320 * 10, c2params);
 ```
 
 This function needs to be called only once unless one of the settings (such as
@@ -45,7 +45,7 @@ computing the velocities for 20 frames.
 
 ```cpp
 for (int i = 0; i < 50; i++) {
-  strafe_c2_ctsts(cts, sts, 20, v, c2params);
+  strafe_c2_precom2(cts, sts, 20, v, c2params);
   for (int j = 0; j < 20; j++)
     v = strafe_c2_side(v, cts[j], sts[j]);
 }
@@ -69,5 +69,5 @@ Under some situations we can reuse the arrays, as long as the speed and
 settings of each frame remain the same.  For example, when optimising the
 strafing path we might have the same starting speed and settings, hence the
 speeds for subsequent frames will be the same, only with different velocity
-directions.  In this case we can pull ``strafe_c2_ctsts`` out of the loop and
+directions.  In this case we can pull ``strafe_c2_precom2`` out of the loop and
 invoke it only once, which can significantly reduce the computing time.
